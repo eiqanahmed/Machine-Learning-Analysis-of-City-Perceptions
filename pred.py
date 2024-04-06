@@ -244,7 +244,6 @@ def predict_all(file_path):
         (data["Q9"]),
     ], axis=1)
 
-    # Now explicitly check for any non-numeric types or NaN values in columns to be used
     if np.isnan(data_fets).any():
         print("NaN values detected in the dataset. Consider imputation.")
 
