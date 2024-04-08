@@ -123,23 +123,6 @@ def clean_up_input(data):
 
     return data
 
-def predict_all(filename):
-    """
-    Make predictions for the data in filename
-    """
-    # read the file containing the test data
-    # you do not need to use the "csv" package like we are using
-    # (e.g. you may use numpy, pandas, etc)
-    data = pd.read_csv(open(filename))
-
-    predictions = []
-    for test_example in data:
-        # obtain a prediction for this test example
-        pred = predict(test_example)
-        predictions.append(pred)
-
-    return predictions
-
 if __name__ == "__main__":
     #Vectorizeation
     process_Q56(data)
@@ -167,8 +150,6 @@ if __name__ == "__main__":
         (data["Q9"]),
     ], axis=1)
     
-    # Now explicitly check for any non-numeric types or NaN values in columns to be used
-
     if np.isnan(data_fets).any():
         print("NaN values detected in the dataset. Consider imputation.")
 
