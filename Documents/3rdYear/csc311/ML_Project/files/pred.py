@@ -87,6 +87,53 @@ def cat_in_s(s, cat):
 #
 #
 # From LAB 5:
+def loss(w, X, t):
+    """
+    Compute the average cross-entropy loss of a logistic regression model
+    with weights `w` on the data set with input data matrix `X` and
+    targets `t`. Please use the function `np.logaddexp` for numerical
+    stability.
+
+    Parameters:
+        `w` - a numpy array of shape (D+1)
+        `X` - data matrix of shape (N, D+1)
+        `t` - target vector of shape (N)
+
+    Returns: a scalar cross entropy loss value, computed using the numerically
+             stable np.logaddexp function.
+    """
+    sum = 0
+    N = X.shape[0]
+    z = X @ w
+    average_loss = np.mean(t * np.logaddexp(0, -z) + (1 - t) * np.logaddexp(0, z))
+    return average_loss
+
+
+def accuracy(w, X, t, thres=0.5):
+    """
+    Compute the accuracy of a logistic regression model with weights `w`
+    on the data set with input data matrix `X` and targets `t`
+
+    If the logistic regression model prediction is y >= thres, then
+    predict that t = 1. Otherwise, predict t = 0.
+    (Note that this is an arbitrary decision that we are making, and
+    it makes virtually no difference if we decide to predict t = 0 if
+    y == thres exactly, since the chance of y == thres is highly
+    improbable.)
+
+    Parameters:
+        `w` - a numpy array of shape (D+1)
+        `X` - data matrix of shape (N, D+1)
+        `t` - target vector of shape (N)
+        `thres` - a value between 0 and 1
+
+    Returns: accuracy value, between 0 and 1
+    """
+    y = pred(w, X)
+    predictions = (y >= thres).astype(int)
+    return np.mean(predictions == t)
+
+
 def solve_via_sgd(alpha=0.0025, n_epochs=0, batch_size=100,
                   X_train=X_train_norm, t_train=t_train,
                   X_valid=X_valid_norm, t_valid=t_valid,
