@@ -440,13 +440,11 @@ def predict_all(file_path):
 
     documents = [TaggedDocument(words=doc.split(), tags=[i]) for i, doc in enumerate(data['Q10'].fillna(""))]
 
-# Train a Doc2Vec model
     model = Doc2Vec(documents, vector_size=20, window=2, min_count=1, workers=4, epochs=40)
 
-    # Generate embeddings for each description in "Q10"
+    # Generate embeddings for each input in "Q10"
     Q10_embeddings = np.array([model.dv[i] for i in range(len(documents))])
     Q10_embeddings_df = pd.DataFrame(Q10_embeddings, columns=[f'Q10_embed_{i}' for i in range(Q10_embeddings.shape[1])])
-    # Assuming `data` is your existing DataFrame
     data = pd.concat([data.reset_index(drop=True), Q10_embeddings_df.reset_index(drop=True)], axis=1)
     # print(data.iloc[-1])
     
