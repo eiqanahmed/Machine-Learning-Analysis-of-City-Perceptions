@@ -86,6 +86,91 @@ def cat_in_s(s, cat):
 #
 #
 #
+# From LAB 5:
+def solve_via_sgd(alpha=0.0025, n_epochs=0, batch_size=100,
+                  X_train=X_train_norm, t_train=t_train,
+                  X_valid=X_valid_norm, t_valid=t_valid,
+                  w_init=None, plot=True):
+    '''
+    Given `alpha` - the learning rate
+          `n_epochs` - the number of **epochs** of gradient descent to run
+          `batch_size` - the size of ecach mini batch
+          `X_train` - the data matrix to use for training
+          `t_train` - the target vector to use for training
+          `X_valid` - the data matrix to use for validation
+          `t_valid` - the target vector to use for validation
+          `w_init` - the initial `w` vector (if `None`, use a vector of all zeros)
+          `plot` - whether to track statistics and plot the training curve
+
+    Solves for logistic regression weights via stochastic gradient descent,
+    using the provided batch_size.
+
+    Return weights after `niter` iterations.
+    '''
+    # as before, initialize all the weights to zeros
+    w = np.zeros(X_train.shape[1])
+
+    # as before, track the loss and accuracy values at each iteration
+    train_loss = [] # for the current minibatch
+    valid_loss = [] # for the entire validation data set
+    train_acc = []  # for the current minibatch
+    valid_acc = []  # for the entire validation data set
+
+    # track the number of iterations
+    niter = 0
+
+    # we will use these indices to help shuffle X_train
+    N = X_train.shape[0] # number of training data points
+    indices = list(range(N))
+
+    for e in range(n_epochs):
+        # Each epoch will iterate over the training data set exactly once.
+        # At the beginning of each epoch, we need to shuffle the order of
+        # data points in X_train. Since we do not want to modify the input
+        # argument `X_train`, we will instead randomly shuffle the `indices`,
+        # and we will use `indices` to iterate over the training data
+        random.shuffle(indices)
+
+        for i in range(0, N, batch_size):
+            if (i + batch_size) >= N:
+                # At the very end of an epoch, if there are not enough
+                # data points to form an entire batch, then skip this batch
+                continue
+
+            indices_in_batch = indices[i: i+batch_size]
+            X_minibatch = X_train[indices_in_batch]
+            t_minibatch = t_train[indices_in_batch]
+
+            dw = grad(w, X_minibatch, t_minibatch)# TODO: gradient of the avg loss over the minibatch
+            w = w - alpha * dw
+
+            if plot:
+                # Record the current training and validation loss values
+                train_loss.append(loss(w, X_train, t_train))
+                valid_loss.append(loss(w, X_valid, t_valid))
+                train_acc.append(accuracy(w, X_train, t_train))
+                valid_acc.append(accuracy(w, X_valid, t_valid))
+
+    if plot:
+        plt.title("SGD Training Curve Showing Training and Validation Loss at each Iteration")
+        plt.plot(train_loss, label="Training Loss")
+        plt.plot(valid_loss, label="Validation Loss")
+        plt.xlabel("Iterations")
+        plt.ylabel("Loss")
+        plt.show()
+
+        plt.title("SGD Training Curve Showing Training and Validation Accuracy at each Iteration")
+        plt.plot(train_acc, label="Training Accuracy")
+        plt.plot(valid_acc, label="Validation Accuracy")
+        plt.xlabel("Iterations")
+        plt.ylabel("Accuracy")
+        plt.show()
+
+        print("Final Training Loss:", train_loss[-1])
+        print("Final Validation Loss:", valid_loss[-1])
+        print("Final Training Accuracy:", train_acc[-1])
+        print("Final Validation Accuracy:", valid_acc[-1])
+    return w
 
 def softmax(z):
     """
@@ -1907,7 +1992,7 @@ if __name__ == "__main__":
         
     X_train_norm[:, numerical_value_start:] = (X_train[:, numerical_value_start:] - mean) / std
     X_valid_norm[:, numerical_value_start:] = (X_valid[:, numerical_value_start:] - mean) / std
-    w = solve_via_sgd(alpha=0.05, X_train=X_train_norm, t_train=t_train, n_epochs=40, batch_size=50)
+    w = solve_via_sgd(alpha=0.05, n_epochs=40, batch_size=50, X_train=X_train_norm, t_train=t_train, X_valid=X_valid_norm, t_valid=t_valid, w_init=None, plot=True)
     y_pred = pred(X_valid_norm, w)
 
     validation_accuracy = accuracy(w, X_valid_norm, t_valid)
