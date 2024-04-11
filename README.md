@@ -10,3 +10,5 @@ that required them to describe a certain aspect of it. Here are the questions th
 8. How many different languages might you overhear during a stroll through the city?
 9. How many different fashion styles might you spot within a 10-minute walk in the city?
 10. What quote comes to mind when you think of this city?
+
+4 different models were then trained to make a prediction about which city a student may be talking about based on their answers to these questions.
