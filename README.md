@@ -1,4 +1,4 @@
-Conducted a questionnaire where students were randomly assigned 1 out of the following four cities: Rio De Janeiro, New York, Dubai, and Paris. Students were then asked questions about thier city
+Conducted a questionnaire where students were randomly assigned 1 out of the following four cities: Rio De Janeiro, New York, Dubai, and Paris. Students were then asked questions about their city
 that required them to describe a certain aspect of it. Here are the questions that were asked alongside the options that students were given for each question:
 1. From a scale 1 to 5, how popular is this city? (1 is the least popular and 5 is the most popular)
 2. On a scale of 1 to 5, how efficient is this city at turning everyday occurrences into potential viral moments on social media? (1 is the least efficient and 5 is the most efficient)
